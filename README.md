@@ -1,17 +1,18 @@
 # QR Code Card
 
-A responsive Frontend Mentor QR card built with Next.js 16, React 19, TypeScript and Tailwind 4.
+The [Frontend Mentor QR code component](https://www.frontendmentor.io/challenges/qr-code-component-iux_sIO_H), built with Next.js 16.3.6, React 19.2.8, TypeScript 5.9.3 and Tailwind 4.2.1 on Node 24.
 
-The supplied PNG remains unchanged. Semantic article content, a direct text alternative, visible link focus and a 16px body-text floor make the card usable without scanning or client scripting. It needs no account, database or payment.
+Live: https://qr-code-card.royeradames.com/
+
+- The card follows the 1440 and 375 design frames: a 320 px card, 288 px QR image, 22 px heading and the design's colours. The official designs are in `reference/design/`.
+- Body text is 16 px instead of the design's 15 px, to keep the family text floor.
+- The QR image opens Frontend Mentor; the same destination is a text link in the card copy, so the card works without a second device.
+- `og:site_name` and WebSite JSON-LD name the site "QR Code Card".
 
 ## Development
 
-Run `npm ci`, `npm run build`, and `npm start`.
-
-## Verification
-
-Mac2 build, lint, TypeScript and production dependency audit pass. Actual browser checks cover eight widths from 320px to 1536px, disabled scripts, image loading, focus visibility and no unexpected writes or errors. Apple Vision decoded the PNG to the same Frontend Mentor URL used by the text alternative. The mobile view was visually inspected.
-
-PR Preview, Lighthouse and production verification are tracked separately before release.
-
-[Official brief](https://www.frontendmentor.io/challenges/qr-code-component-iux_sIO_H)
+```bash
+npm ci
+npm run lint && npm run typecheck && npm run build
+npm test   # Playwright: design frames, 320-1600 px sweep, keyboard, no-JS
+```

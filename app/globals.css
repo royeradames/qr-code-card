@@ -1,21 +1,85 @@
 @import "tailwindcss";
+
 :root {
   color-scheme: light;
-  --canvas: hsl(212 45% 89%);
-  --ink: hsl(218 44% 22%);
-  --muted: hsl(216 15% 42%);
+  --slate-300: #d5e1ef;
+  --slate-500: #68778d;
+  --slate-900: #1f314f;
+  --white: #ffffff;
+  --focus: #164fba;
 }
+
 * { box-sizing: border-box; }
-body { margin: 0; background: var(--canvas); color: var(--ink); font: 400 1rem/1.4 var(--font-outfit), sans-serif; }
-.page-shell { min-height: 100svh; display: flex; flex-direction: column; }
-main { flex: 1; display: grid; place-items: center; padding: 2rem 1.5rem; }
-.qr-card { width: min(100%, 20rem); padding: 1rem; border-radius: 1.25rem; background: white; text-align: center; box-shadow: 0 1.25rem 1.5rem #1f32510d; }
-.qr-image { display: block; width: 100%; height: auto; border-radius: .625rem; }
-.card-copy { padding: 1.5rem 1rem; }
-h1 { margin: 0 0 1rem; font-size: 1.375rem; line-height: 1.2; font-weight: 700; }
-p { margin: 0; color: var(--muted); }
-a { color: inherit; text-decoration: underline; text-underline-offset: .2em; }
-a:hover { color: var(--ink); }
-a:focus-visible { outline: 3px solid #164fba; outline-offset: 4px; border-radius: .125rem; }
-footer { padding: 0 1.5rem 1.25rem; text-align: center; }
-footer p { color: var(--ink); }
+
+body {
+  margin: 0;
+  background: var(--slate-300);
+  color: var(--slate-900);
+  font: 400 1rem/1.4 var(--font-outfit), sans-serif;
+}
+
+/* The card is centred in the first viewport, as in both design frames; the attribution sits below it. */
+main {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: 2rem 1rem;
+}
+
+.qr-card {
+  width: min(100%, 20rem);
+  padding: 1rem 1rem 2.5rem;
+  border-radius: 1.25rem;
+  background: var(--white);
+  text-align: center;
+  box-shadow: 0 1.5625rem 1.5625rem rgb(0 0 0 / 0.0477);
+}
+
+.qr-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  border-radius: 0.625rem;
+}
+
+.card-copy {
+  padding: 1.5rem 1rem 0;
+}
+
+h1 {
+  margin: 0 0 1rem;
+  font-size: 1.375rem;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+/* Design preset 2 is 15px; the family floor keeps body text at 16px. */
+.card-copy p {
+  margin: 0;
+  color: var(--slate-500);
+  font-size: 1rem;
+  line-height: 1.4;
+  letter-spacing: 0.0125rem;
+}
+
+a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+a:hover { color: var(--slate-900); }
+
+a:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 4px;
+  border-radius: 0.125rem;
+}
+
+footer {
+  padding: 0 1rem 1.5rem;
+  text-align: center;
+}
+
+footer p { margin: 0; }

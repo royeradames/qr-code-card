@@ -44,6 +44,9 @@ test("declares one site name in og:site_name and WebSite JSON-LD, with canonical
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /^https:\/\/qr-code-card\.royeradames\.com\/?$/);
   await expect(page.locator('link[rel="icon"][type="image/svg+xml"]')).toHaveCount(1);
   await expect(page.locator('link[rel="apple-touch-icon"]')).toHaveCount(1);
+  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute("content", /opengraph-image/);
+  await expect(page.locator('meta[property="og:image:width"]')).toHaveAttribute("content", "1200");
+  await expect(page.locator('meta[property="og:image:alt"]')).toHaveAttribute("content", /QR Code Card/);
 });
 
 for (const frame of [
@@ -62,6 +65,7 @@ for (const frame of [
     expect(Math.abs(box.y + box.height / 2 - frame.height / 2)).toBeLessThanOrEqual(14);
     await expect(card).toHaveCSS("border-radius", "20px");
     await expect(card).toHaveCSS("padding-top", "16px");
+    await expect(card).toHaveCSS("padding-bottom", "40px");
     const image = (await page.locator(".qr-image").boundingBox())!;
     expect(image.width).toBe(288);
     expect(image.height).toBe(288);

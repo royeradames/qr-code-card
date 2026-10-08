@@ -6,8 +6,8 @@ Live: https://qr-code-card.royeradames.com/
 
 - The card follows the 1440 and 375 design frames: a 320 px card, 288 px QR image, 22 px heading and the design's colours. The official designs are in `reference/design/`.
 - Body text is 16 px instead of the design's 15 px, to keep the family text floor.
-- The QR image opens Frontend Mentor; the same destination is a text link in the card copy, so the card works without a second device.
-- `og:site_name` and WebSite JSON-LD name the site "QR Code Card".
+- Scanning the QR code opens Frontend Mentor; the same destination is a text link in the card copy, so the card works without a second device.
+- `og:site_name` and WebSite JSON-LD name the site "QR Code Card"; a 1200 x 630 Open Graph image is generated at build time.
 
 ## Development
 

@@ -1,2 +1,2 @@
 # repo head paths base runs  (verify Mac2 batch 2: Zod Mini etc., state before first merge vs latest merge)
-markdown-editor-ui claude/lazy-markdown-preview /
+coding-bootcamp-testimonials-slider-fm claude/later-hidden-photos /

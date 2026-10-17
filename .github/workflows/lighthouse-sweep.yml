@@ -3,6 +3,7 @@ name: Lighthouse sweep (Frontend Mentor production pages)
 on:
   push:
     branches: [claude/lighthouse-sweep]
+    paths: ['.github/lh/urls.txt', '.github/lh/runs.txt', '.github/lh/run.sh', '.github/workflows/lighthouse-sweep.yml', '.github/lh/scripted/**']
 permissions:
   contents: read
 concurrency:
@@ -27,5 +28,28 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: lh-shard-${{ matrix.shard }}
+          path: out/
+          retention-days: 7
+  scripted:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with: { persist-credentials: false, fetch-depth: 1 }
+      - uses: actions/setup-node@v4
+        with: { node-version: '24' }
+      - run: cd .github/lh/scripted && npm install --no-audit --no-fund
+      - name: Audit views that need browser-local state first
+        run: |
+          export CHROME_PATH=$(command -v google-chrome); mkdir -p out
+          while read -r ROW URL SETUP; do
+            for RUN in $(seq 1 "$(cat .github/lh/runs.txt)"); do for DEV in mobile desktop; do
+              node .github/lh/scripted/scripted.mjs "$ROW" "$URL" "$SETUP" "$DEV" "out/$ROW--$DEV--$RUN.json" || echo "$ROW $DEV run$RUN failed"
+              [ -s "out/$ROW--$DEV--$RUN.json" ] && gzip -9 -f "out/$ROW--$DEV--$RUN.json"
+            done; done
+          done < .github/lh/scripted/urls.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lh-scripted
           path: out/
           retention-days: 7

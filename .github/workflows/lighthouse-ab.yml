@@ -1,0 +1,45 @@
+name: Lighthouse A/B and gates (fix branch vs main)
+# Measurement branch only. For each "repo branch paths" line in .github/lh/ab.txt: build main and the branch,
+# serve both locally, alternate Lighthouse runs, and run the branch's lint, typecheck and tests (base too, to tell new failures from old).
+on:
+  push:
+    branches: [claude/lighthouse-sweep]
+    paths: ['.github/lh/ab.txt', '.github/lh/ab.sh', '.github/workflows/lighthouse-ab.yml']
+permissions:
+  contents: read
+jobs:
+  plan:
+    runs-on: ubuntu-24.04
+    outputs:
+      matrix: ${{ steps.m.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { persist-credentials: false, fetch-depth: 1 }
+      - id: m
+        run: |
+          python3 - >> "$GITHUB_OUTPUT" <<'PY'
+          import json
+          rows=[dict(zip(["repo","branch","paths"],l.split())) for l in open(".github/lh/ab.txt") if l.strip() and not l.startswith("#")]
+          print("matrix="+json.dumps(rows))
+          PY
+  ab:
+    needs: plan
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    strategy:
+      fail-fast: false
+      matrix:
+        item: ${{ fromJson(needs.plan.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { persist-credentials: false, fetch-depth: 1 }
+      - uses: actions/setup-node@v4
+        with: { node-version: '24' }
+      - run: npm install -g lighthouse@13.5.0 --no-audit --no-fund
+      - run: .github/lh/ab.sh "${{ matrix.item.repo }}" "${{ matrix.item.branch }}" "${{ matrix.item.paths }}"
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ab-${{ matrix.item.repo }}
+          path: ab/
+          retention-days: 7

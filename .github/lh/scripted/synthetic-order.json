@@ -1,0 +1,36 @@
+{
+  "records": [
+    {
+      "createdAt": "2026-10-16T00:00:00.000Z",
+      "customer": {
+        "address": "Synthetic test address",
+        "city": "Synthetic City",
+        "country": "ZZ",
+        "email": "fm-audit@example.invalid",
+        "name": "Synthetic Audit Person",
+        "phone": "0000000000",
+        "zip": "00000"
+      },
+      "grandTotal": 599,
+      "id": "AUD-FM-AUDIT-01",
+      "lines": [
+        {
+          "name": "YX1 Wireless Earphones",
+          "productId": "yx1-earphones",
+          "quantity": 1,
+          "unitPrice": 599
+        }
+      ],
+      "payment": "in_person",
+      "pickupCity": "santo_domingo",
+      "settledAt": null,
+      "shipping": 0,
+      "status": "pending_in_person",
+      "subtotal": 599,
+      "vat": 0
+    }
+  ],
+  "sourceBlob": "6360e87ea8bd37e07c8aec958d5e43fa3360f08f",
+  "sourceSha": "cd119f50fb264164c49dc587a17c47561517a22b",
+  "state": "SYNTHETIC_SOURCE_SHAPED_RECORD_UNRUN_NOT_A_QUOTE_OR_PAYMENT"
+}

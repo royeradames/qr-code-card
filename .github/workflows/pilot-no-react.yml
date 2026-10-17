@@ -1,0 +1,88 @@
+name: Pilot - the same page without client React (measurement only)
+# Answers "is it the stack?": builds a repo's main as a static export, then serves it twice from one static
+# server, as built and with every script removed, and compares phone Lighthouse and screenshots. Nothing is
+# committed to the repo; this never deploys.
+on:
+  push:
+    branches: [claude/lighthouse-sweep]
+    paths: ['.github/lh/pilot.txt', '.github/workflows/pilot-no-react.yml']
+permissions:
+  contents: read
+jobs:
+  pilot:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with: { persist-credentials: false, fetch-depth: 1 }
+      - uses: actions/setup-node@v4
+        with: { node-version: '24' }
+      - run: npm install -g lighthouse@13.5.0 --no-audit --no-fund
+      - name: Build, strip, serve, measure
+        run: |
+          set -u
+          REPO=$(head -1 .github/lh/pilot.txt)
+          git clone -q --depth 1 "https://github.com/royeradames/$REPO.git" app && cd app
+          # Static export for this measurement only (not committed).
+          sed -i 's/const config: NextConfig = {/const config: NextConfig = { output: "export",/' next.config.ts
+          grep -n "output" next.config.ts
+          (npm ci --no-audit --no-fund || npm install --no-audit --no-fund) > ../install.log 2>&1
+          npm run build > ../build.log 2>&1; echo "build rc=$?"; tail -5 ../build.log
+          cd ..; rm -rf withjs nojs; cp -r app/out withjs; cp -r app/out nojs
+          python3 - <<'PY'
+          import re,pathlib
+          for f in pathlib.Path('nojs').rglob('*.html'):
+              s=f.read_text()
+              n0=len(s)
+              s=re.sub(r'<script\b[^>]*>.*?</script>','',s,flags=re.S)
+              s=re.sub(r'<link\b[^>]*rel="(?:preload|modulepreload)"[^>]*as="script"[^>]*/?>','',s)
+              s=re.sub(r'<link\b[^>]*as="script"[^>]*rel="(?:preload|modulepreload)"[^>]*/?>','',s)
+              f.write_text(s); print(f, n0, '->', len(s))
+          PY
+          (cd withjs && python3 -m http.server 3201 > ../s1.log 2>&1 &); (cd nojs && python3 -m http.server 3202 > ../s2.log 2>&1 &); sleep 2
+          export CHROME_PATH=$(command -v google-chrome); mkdir -p lh
+          for run in 1 2 3 4 5; do for v in 3201 3202; do
+            lighthouse "http://127.0.0.1:$v/" --quiet --output=json --output-path=lh/$v-$run.json --chrome-flags="--headless=new --no-sandbox" > /dev/null 2>&1
+          done; done
+          python3 - <<'PY'
+          import json,glob,statistics
+          for v,name in (('3201','as built (React)'),('3202','no scripts')):
+              rs=[json.load(open(f)) for f in sorted(glob.glob(f'lh/{v}-*.json'))]
+              p=[round(r['categories']['performance']['score']*100) for r in rs]
+              a=[round(r['categories']['accessibility']['score']*100) for r in rs]
+              lcp=statistics.median(r['audits']['largest-contentful-paint']['numericValue'] for r in rs)
+              tbt=statistics.median(r['audits']['total-blocking-time']['numericValue'] for r in rs)
+              js=statistics.median(sum(i.get('transferSize',0) for i in r['audits']['network-requests']['details']['items'] if i.get('resourceType')=='Script') for r in rs)//1024
+              print(f"{name:18} perf {p} median {statistics.median(p)} | a11y {a} | LCP {lcp:.0f} ms | TBT {tbt:.0f} ms | script {js} KB")
+          PY
+          npx --yes playwright@1.58.2 install --with-deps chromium > pw.log 2>&1
+          cat > shots.mjs <<'JS'
+          import { chromium } from 'playwright';
+          const b = await chromium.launch();
+          for (const w of [375, 1440]) for (const [n, port] of [['withjs', 3201], ['nojs', 3202]]) {
+            const p = await b.newPage({ viewport: { width: w, height: 900 } });
+            await p.goto(`http://127.0.0.1:${port}/`, { waitUntil: 'networkidle' });
+            await p.evaluate(() => document.fonts.ready);
+            await p.screenshot({ path: `shot-${n}-${w}.png`, fullPage: true });
+            // The accordion must still work without scripts: open another question, the first open one closes.
+            const s = await p.locator('details summary').nth(0);
+            await s.click();
+            const open = await p.locator('details[open]').count();
+            const firstOpen = await p.locator('details').nth(0).getAttribute('open');
+            console.log(n, w, 'after click: open details =', open, ', first is open =', firstOpen !== null);
+            await p.close();
+          }
+          await b.close();
+          JS
+          npm init -y > /dev/null 2>&1; npm i playwright@1.58.2 --no-audit --no-fund > /dev/null 2>&1; node shots.mjs
+          pip install -q pillow > /dev/null 2>&1
+          python3 - <<'PY'
+          from PIL import Image, ImageChops
+          for w in (375,1440):
+              A=Image.open(f'shot-withjs-{w}.png').convert('RGB'); B=Image.open(f'shot-nojs-{w}.png').convert('RGB')
+              if A.size!=B.size: print(w,'size differs',A.size,B.size); continue
+              n=sum(1 for px in ImageChops.difference(A,B).getdata() if max(px)>16); print(w,'differing pixels',n)
+          PY
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with: { name: pilot, path: 'lh/', retention-days: 7 }

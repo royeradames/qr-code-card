@@ -14,7 +14,7 @@ for (const p of paths.split(',')) for (const w of [375, 768, 1440]) for (const [
   // Scroll through once so lazy images load, then wait for every image and font before the capture.
   await page.evaluate(async () => { for (let y = 0, n = 0; y < Math.min(document.body.scrollHeight, 20000) && n < 60; y += 400, n++) { window.scrollTo(0, y); await new Promise(r => setTimeout(r, 60)); } window.scrollTo(0, 0); });
   await page.waitForLoadState('networkidle', { timeout: 15000 }).catch(() => {});
-  await page.evaluate(() => Promise.all([document.fonts.ready, ...[...document.images].map(i => i.complete ? null : new Promise(r => { i.onload = i.onerror = r; }))]));
+  await page.evaluate(() => Promise.race([Promise.all([document.fonts.ready, ...[...document.images].map(i => i.complete ? null : new Promise(r => { i.onload = i.onerror = r; }))]), new Promise(r => setTimeout(r, 10000))]));
   await page.waitForTimeout(300);
   await page.screenshot({ path: `shot-${side}-${p.replace(/[/?=&]/g, '_')}-${w}.png`, fullPage: true, animations: 'disabled', caret: 'hide' });
   await page.close();

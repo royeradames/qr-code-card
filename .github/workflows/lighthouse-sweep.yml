@@ -3,7 +3,7 @@ name: Lighthouse sweep (Frontend Mentor production pages)
 on:
   push:
     branches: [claude/lighthouse-sweep]
-    paths: ['.github/lh/urls.txt', '.github/lh/runs.txt', '.github/lh/run.sh', '.github/workflows/lighthouse-sweep.yml', '.github/lh/scripted/**']
+    paths: ['.github/lh/sweep-id.txt', '.github/lh/urls.txt', '.github/lh/runs.txt', '.github/lh/run.sh', '.github/workflows/lighthouse-sweep.yml', '.github/lh/scripted/**']
 permissions:
   contents: read
 concurrency:

@@ -9,7 +9,8 @@ for side in base head; do
   if [ $side = head ]; then B=(-b "$BRANCH"); else B=(); fi
   git clone -q --depth 1 "${B[@]}" "https://github.com/royeradames/$REPO.git" $side || { echo "clone $side failed" | tee -a summary.txt; exit 1; }
   (cd $side && git log --oneline -1 && npm ci --no-audit --no-fund && npm run build) > $side-build.log 2>&1
-  echo "$side $(cd $side && git rev-parse --short HEAD) build rc=$?" | tee -a summary.txt
+  rc=$?; echo "$side $(cd $side && git rev-parse --short HEAD) build rc=$rc" | tee -a summary.txt
+  [ $rc -ne 0 ] && { tail -30 $side-build.log; exit 1; }
 done
 port_base=3101; port_head=3102
 (cd base && npx next start -H 127.0.0.1 -p $port_base > ../base-server.log 2>&1 &)
@@ -53,8 +54,8 @@ gzip -9 lh-*.json
 npx --yes playwright@latest --version > /dev/null 2>&1
 for side in base head; do
   ( cd $side
-    for s in lint typecheck; do if npm run | grep -q "^  $s$"; then npm run $s > ../$side-$s.log 2>&1; echo "$side $s rc=$?"; fi; done
-    if npm run | grep -q "^  test$"; then npx playwright install --with-deps chromium > ../$side-pwinstall.log 2>&1; CI=1 npm test > ../$side-test.log 2>&1; echo "$side test rc=$?"; tail -5 ../$side-test.log | sed "s/^/  $side test: /"; fi
+    for s in lint typecheck; do if npm run | grep -q "^  $s$"; then npm run $s > ../$side-$s.log 2>&1; rc=$?; echo "$side $s rc=$rc"; fi; done
+    if npm run | grep -q "^  test$"; then npx playwright install --with-deps chromium > ../$side-pwinstall.log 2>&1; CI=1 npm test > ../$side-test.log 2>&1; rc=$?; echo "$side test rc=$rc"; tail -5 ../$side-test.log | sed "s/^/  $side test: /"; fi
   ) | tee -a summary.txt
 done
 cat summary.txt

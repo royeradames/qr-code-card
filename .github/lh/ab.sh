@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 # base = default branch. Usage: ab.sh <repo> <branch> <comma-separated paths>. Writes ab/: Lighthouse reports, build/gate logs, summary.txt.
 set -u
-REPO=$1; BRANCH=$2; IFS=, read -ra PATHS <<< "$3"; RUNS=${RUNS:-5}
+REPO=$1; BRANCH=$2; IFS=, read -ra PATHS <<< "$3"; BASEREF=${4:-}; RUNS=${RUNS:-5}
 mkdir -p ab; cd ab
 export CHROME_PATH=$(command -v google-chrome)
 for side in base head; do
-  # base = the repo's default (production) branch; head = the fix branch
-  if [ $side = head ]; then B=(-b "$BRANCH"); else B=(); fi
-  git clone -q --depth 1 "${B[@]}" "https://github.com/royeradames/$REPO.git" $side || { echo "clone $side failed" | tee -a summary.txt; exit 1; }
+  # base = the repo's default branch, or BASEREF (a commit) when given; head = the fix branch or a commit
+  git clone -q --filter=blob:none "https://github.com/royeradames/$REPO.git" $side || { echo "clone $side failed" | tee -a summary.txt; exit 1; }
+  ref=""; [ $side = head ] && ref=$BRANCH; [ $side = base ] && ref=${BASEREF:-}
+  [ -n "$ref" ] && { (cd $side && git checkout -q "$ref") || { echo "checkout $side $ref failed" | tee -a summary.txt; exit 1; }; }
   (cd $side && git log --oneline -1 && npm ci --no-audit --no-fund && npm run build) > $side-build.log 2>&1
   rc=$?; echo "$side $(cd $side && git rev-parse --short HEAD) build rc=$rc" | tee -a summary.txt
   [ $rc -ne 0 ] && { tail -30 $side-build.log; exit 1; }

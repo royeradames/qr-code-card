@@ -1,7 +1,17 @@
-# repo branch paths(comma)
-space-tourism-website claude/latin-woff2-fonts /,/crew,/destination,/technology/spaceport
-nft-preview-card claude/latin-woff2-fonts /
-single-page-portfolio-fm claude/latin-woff2-fonts /
-angular-results-summary-component claude/latin-woff2-fonts /
-link-sharing-app claude/latin-woff2-fonts /,/preview
-# rerun 22:51:49
+# repo head paths base runs  (verify Mac2 merges: parent vs merge commit)
+personal-finance-app-fm e888cb03a9f0 /login,/sign-up e888cb03a9f0^ 2
+link-sharing-app d54ff90457f2 /,/preview d54ff90457f2^ 2
+space-tourism-website 375e6e26c757 /,/crew,/destination,/technology 375e6e26c757^ 2
+designo-site af1074bc2ec3 /,/about,/web-design,/locations,/contact af1074bc2ec3^ 2
+coding-bootcamp-testimonials-slider-fm 9e2f3f9a7d6b / 9e2f3f9a7d6b^ 2
+dine-restaurant d52ec98092a1 / d52ec98092a1^ 2
+meet-landing-page-fm 01a23b8497d8 / 01a23b8497d8^ 2
+pod-request-access-landing-page-fm c70f21c45a24 / c70f21c45a24^ 2
+agency-landing-page-fm 270ebcff2473 / 270ebcff2473^ 2
+article-preview-component-fm 41f3d3ccc606 / 41f3d3ccc606^ 2
+base-apparel-coming-soon-page-fm b1e09e8d6bcc / b1e09e8d6bcc^ 2
+minimalist-portfolio-website-fm 2287c9486b89 /,/portfolio,/portfolio/manage,/contact 2287c9486b89^ 2
+angular-results-summary-component bb7dade68684 / bb7dade68684^ 2
+blog-preview-card 39aece0286c3 / 39aece0286c3^ 2
+nft-preview-card 385813d62909 / 385813d62909^ 2
+single-page-portfolio-fm e35d8a18af91 / e35d8a18af91^ 2

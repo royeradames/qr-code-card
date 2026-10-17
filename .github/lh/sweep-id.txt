@@ -1,1 +1,1 @@
-sweep 2026-10-17T02:53:32Z after Mac2 font-subset and image merges (02:42-02:50Z)
+sweep 2026-10-17T04:12:26Z after Mac2 batch 2 (Zod Mini)

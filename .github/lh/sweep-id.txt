@@ -1,1 +1,1 @@
-sweep 2026-10-17T04:12:26Z after Mac2 batch 2 (Zod Mini)
+sweep 2026-10-17T05:16:27Z after no-preload merges (minimalist, todo)

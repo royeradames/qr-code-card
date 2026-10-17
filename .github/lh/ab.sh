@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
-# Usage: ab.sh <repo> <branch> <comma-separated paths>. Writes ab/: Lighthouse reports, build/gate logs, summary.txt.
+# base = default branch. Usage: ab.sh <repo> <branch> <comma-separated paths>. Writes ab/: Lighthouse reports, build/gate logs, summary.txt.
 set -u
 REPO=$1; BRANCH=$2; IFS=, read -ra PATHS <<< "$3"; RUNS=${RUNS:-5}
 mkdir -p ab; cd ab
 export CHROME_PATH=$(command -v google-chrome)
 for side in base head; do
-  ref=main; [ $side = head ] && ref=$BRANCH
-  git clone -q --depth 1 -b "$ref" "https://github.com/royeradames/$REPO.git" $side || { echo "clone $side failed"; exit 1; }
+  # base = the repo's default (production) branch; head = the fix branch
+  if [ $side = head ]; then B=(-b "$BRANCH"); else B=(); fi
+  git clone -q --depth 1 "${B[@]}" "https://github.com/royeradames/$REPO.git" $side || { echo "clone $side failed" | tee -a summary.txt; exit 1; }
   (cd $side && git log --oneline -1 && npm ci --no-audit --no-fund && npm run build) > $side-build.log 2>&1
   echo "$side $(cd $side && git rev-parse --short HEAD) build rc=$?" | tee -a summary.txt
 done

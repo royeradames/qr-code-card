@@ -1,4 +1,2 @@
 # repo head paths base runs  (verify Mac2 batch 2: Zod Mini etc., state before first merge vs latest merge)
-dine-restaurant 659808073633 /,/booking 659808073633^ 2
-feedback-app-frontend 20213867e8e5 /,/feedback/new 20213867e8e5^ 2
-# 01:29:26
+link-sharing-app claude/footer-waits-for-draft /dashboard/links,/dashboard/profile-details,/preview

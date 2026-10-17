@@ -1,18 +1,17 @@
-import Image from "next/image";
-
 export default function Home() {
   return (
     <>
       <main>
         <article className="qr-card" aria-labelledby="card-title">
-          <Image
+          {/* eslint-disable-next-line @next/next/no-img-element -- next/image adds client JavaScript, and this image ships unoptimized anyway */}
+          <img
             className="qr-image"
             src="/images/image-qr-code.png"
             alt="QR code that opens Frontend Mentor. The text link below goes to the same place."
             width={288}
             height={288}
-            preload
-            unoptimized
+            fetchPriority="high"
+            decoding="sync"
           />
           <div className="card-copy">
             <h1 id="card-title">Improve your front-end skills by building projects</h1>

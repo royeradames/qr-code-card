@@ -1,9 +1,2 @@
-# repo head paths base runs  (font preload back where preload-off added CLS; bootcamp also defers the hidden photo)
+# repo head paths base runs
 coding-bootcamp-testimonials-slider-fm claude/later-hidden-photos /
-intro-component-with-signup-form-fm claude/font-preload-back-20261017 /
-audiophile-ecommerce claude/font-preload-back-20261017 /,/headphones/xx59-headphones
-designo-site claude/font-preload-back-20261017 /,/about
-dine-restaurant claude/font-preload-back-20261017 /
-four-card-feature-section-fm claude/font-preload-back-20261017 /
-notifications-page-fm claude/font-preload-back-20261017 /
-space-tourism-website claude/font-preload-back-20261017 /destination,/destination/mars

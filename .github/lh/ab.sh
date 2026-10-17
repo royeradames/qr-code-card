@@ -43,6 +43,10 @@ for key in sorted(g):
     cats={c:statistics.median(x[0].get(c,0) for x in rs) for c in ['performance','accessibility','best-practices','seo']}
     print(f"{key[0]:28} {key[1]:7} {key[2]:4} n={len(rs)} P{cats['performance']} A{cats['accessibility']} B{cats['best-practices']} S{cats['seo']} perfRuns={[x[0].get('performance') for x in rs]} LCP={med(1):.0f} TBT={med(2):.0f} FCP={med(3):.0f} CLS={med(4):.3f}")
 PY
+# Visual identity: screenshots of base and head while both servers run.
+(cd head && npx playwright install --with-deps chromium > ../pw-shots-install.log 2>&1)
+node ../.github/lh/shots.mjs head "$3" > shots.log 2>&1; echo "shots rc=$?" | tee -a summary.txt
+pip install -q pillow > /dev/null 2>&1; python3 ../.github/lh/shotdiff.py | tee -a summary.txt
 pkill -f "next start" || true
 gzip -9 lh-*.json
 # Gates: lint, typecheck, tests on head; the same on base so pre-existing failures are visible.

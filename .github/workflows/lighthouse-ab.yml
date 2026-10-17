@@ -4,7 +4,7 @@ name: Lighthouse A/B and gates (fix branch vs main)
 on:
   push:
     branches: [claude/lighthouse-sweep]
-    paths: ['.github/lh/ab.txt', '.github/lh/ab.sh', '.github/workflows/lighthouse-ab.yml']
+    paths: ['.github/lh/ab.txt', '.github/lh/ab.sh', '.github/lh/shots.mjs', '.github/lh/shotdiff.py', '.github/workflows/lighthouse-ab.yml']
 permissions:
   contents: read
 jobs:
@@ -41,5 +41,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ab-${{ matrix.item.repo }}
-          path: ab/
+          path: |
+            ab/*.json.gz
+            ab/*.log
+            ab/summary.txt
+            ab/diff-*.png
           retention-days: 7

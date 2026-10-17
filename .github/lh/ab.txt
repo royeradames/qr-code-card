@@ -1,2 +1,7 @@
 # repo branch paths(comma)
 space-tourism-website claude/latin-woff2-fonts /,/crew,/destination,/technology/spaceport
+agency-landing-page-fm claude/inline-css /
+nft-preview-card claude/latin-woff2-fonts /
+single-page-portfolio-fm claude/latin-woff2-fonts /
+angular-results-summary-component claude/latin-woff2-fonts /
+link-sharing-app claude/latin-woff2-fonts /,/preview

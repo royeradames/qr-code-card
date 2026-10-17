@@ -20,15 +20,16 @@ jobs:
       - run: npm install -g lighthouse@13.5.0 --no-audit --no-fund
       - name: Build, strip, serve, measure
         run: |
-          set -u
-          REPO=$(head -1 .github/lh/pilot.txt)
-          git clone -q --depth 1 "https://github.com/royeradames/$REPO.git" app && cd app
+          set +e
+          mkdir -p pilot && cd pilot
+          REPO=$(head -1 ../.github/lh/pilot.txt)
+          git clone -q --depth 1 "https://github.com/royeradames/$REPO.git" src && cd src
           # Static export for this measurement only (not committed).
           sed -i 's/const config: NextConfig = {/const config: NextConfig = { output: "export",/' next.config.ts
           grep -n "output" next.config.ts
           (npm ci --no-audit --no-fund || npm install --no-audit --no-fund) > ../install.log 2>&1
           npm run build > ../build.log 2>&1; echo "build rc=$?"; tail -5 ../build.log
-          cd ..; rm -rf withjs nojs; cp -r app/out withjs; cp -r app/out nojs
+          cd ..; rm -rf withjs nojs; cp -r src/out withjs; cp -r src/out nojs
           python3 - <<'PY'
           import re,pathlib
           for f in pathlib.Path('nojs').rglob('*.html'):
@@ -85,4 +86,4 @@ jobs:
           PY
       - if: always()
         uses: actions/upload-artifact@v4
-        with: { name: pilot, path: 'lh/', retention-days: 7 }
+        with: { name: pilot, path: 'pilot/lh/', retention-days: 7 }

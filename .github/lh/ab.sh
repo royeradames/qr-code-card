@@ -9,7 +9,8 @@ for side in base head; do
   git clone -q --filter=blob:none "https://github.com/royeradames/$REPO.git" $side || { echo "clone $side failed" | tee -a summary.txt; exit 1; }
   ref=""; [ $side = head ] && ref=$BRANCH; [ $side = base ] && ref=${BASEREF:-}
   [ -n "$ref" ] && { (cd $side && git checkout -q "$ref") || { echo "checkout $side $ref failed" | tee -a summary.txt; exit 1; }; }
-  (cd $side && git log --oneline -1 && npm ci --no-audit --no-fund && npm run build) > $side-build.log 2>&1
+  (cd $side && git log --oneline -1 && { npm ci --no-audit --no-fund || { echo "LOCK DRIFT: npm ci refused, using npm install (as Vercel does)"; npm install --no-audit --no-fund; }; } && npm run build) > $side-build.log 2>&1
+  grep -q "LOCK DRIFT" $side-build.log && echo "$side lock drift (npm ci refused; built with npm install)" | tee -a summary.txt
   rc=$?; echo "$side $(cd $side && git rev-parse --short HEAD) build rc=$rc" | tee -a summary.txt
   [ $rc -ne 0 ] && { tail -30 $side-build.log; exit 1; }
 done

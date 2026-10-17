@@ -48,7 +48,7 @@ for key in sorted(g):
 PY
 # Visual identity: screenshots of base and head while both servers run.
 (cd head && npx playwright install --with-deps chromium > ../pw-shots-install.log 2>&1)
-node ../.github/lh/shots.mjs head "$3" > shots.log 2>&1; echo "shots rc=$?" | tee -a summary.txt
+timeout 300 node ../.github/lh/shots.mjs head "$3" > shots.log 2>&1; echo "shots rc=$? (124 = timed out)" | tee -a summary.txt
 pip install -q pillow > /dev/null 2>&1; python3 ../.github/lh/shotdiff.py | tee -a summary.txt
 pkill -f "next start" || true
 gzip -9 lh-*.json

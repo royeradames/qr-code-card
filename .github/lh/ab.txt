@@ -1,6 +1,4 @@
 # repo head paths base runs  (verify Mac2 batch 2: Zod Mini etc., state before first merge vs latest merge)
-audiophile-ecommerce b83409d49e0a /,/checkout 2decfe6403c4^ 2
-designo-site 520b6e03023d /contact 520b6e03023d^ 2
-invoice-app 0558e5f2274e / 0558e5f2274e^ 2
-markdown-editor-ui c4883c90edc2 / 635816d46fe9^ 2
+dine-restaurant 659808073633 /,/booking 659808073633^ 2
+feedback-app-frontend 20213867e8e5 /,/feedback/new 20213867e8e5^ 2
 multi-step-form-fm e6fea5e48f9d / aa26925f4981^ 2

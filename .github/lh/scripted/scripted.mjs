@@ -21,6 +21,15 @@ try {
     await page.goto(origin, { waitUntil: 'networkidle0' });
     await page.evaluate(() => localStorage.setItem('audiophile-demo-cart-v1', JSON.stringify([{ productId: 'yx1-earphones', quantity: 1 }])));
   } else if (setup === 'audiophile-order') {
+    // Reviewed manifest recipe (fixtures-plan.json, audiophile-order): a synthetic order lives only in this
+    // browser, so the store must answer in browser-only demo mode, or the page asks the server for an order
+    // the server never had (404). No order, payment or account request reaches the server.
+    await page.setRequestInterception(true);
+    page.on('request', (req) => {
+      if (new URL(req.url()).pathname === '/api/store/features')
+        return req.respond({ status: 200, contentType: 'application/json', body: JSON.stringify({ demo: true, durableOrders: false, accounts: 'coming_soon' }) });
+      return req.continue();
+    });
     await page.goto(origin, { waitUntil: 'networkidle0' });
     await page.evaluate((r) => localStorage.setItem('audiophile-orders-v1', JSON.stringify(r)), order);
   } else throw new Error(`unknown setup ${setup}`);

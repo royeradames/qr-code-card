@@ -1,1 +1,1 @@
-sweep 2026-10-17T05:16:27Z after no-preload merges (minimalist, todo)
+sweep 2026-10-17T05:45:35Z with the order fixture following the manifest recipe

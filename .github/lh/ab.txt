@@ -1,17 +1,14 @@
-# repo head paths base runs  (verify Mac2 merges: parent vs merge commit)
-personal-finance-app-fm e888cb03a9f0 /login,/sign-up e888cb03a9f0^ 2
-link-sharing-app d54ff90457f2 /,/preview d54ff90457f2^ 2
-space-tourism-website 375e6e26c757 /,/crew,/destination,/technology 375e6e26c757^ 2
-designo-site af1074bc2ec3 /,/about,/web-design,/locations,/contact af1074bc2ec3^ 2
-coding-bootcamp-testimonials-slider-fm 9e2f3f9a7d6b / 9e2f3f9a7d6b^ 2
-dine-restaurant d52ec98092a1 / d52ec98092a1^ 2
-meet-landing-page-fm 01a23b8497d8 / 01a23b8497d8^ 2
-pod-request-access-landing-page-fm c70f21c45a24 / c70f21c45a24^ 2
-agency-landing-page-fm 270ebcff2473 / 270ebcff2473^ 2
-article-preview-component-fm 41f3d3ccc606 / 41f3d3ccc606^ 2
-base-apparel-coming-soon-page-fm b1e09e8d6bcc / b1e09e8d6bcc^ 2
-minimalist-portfolio-website-fm 2287c9486b89 /,/portfolio,/portfolio/manage,/contact 2287c9486b89^ 2
-angular-results-summary-component bb7dade68684 / bb7dade68684^ 2
-blog-preview-card 39aece0286c3 / 39aece0286c3^ 2
-nft-preview-card 385813d62909 / 385813d62909^ 2
-single-page-portfolio-fm e35d8a18af91 / e35d8a18af91^ 2
+# repo head paths base runs  (verify Mac2 batch 2: Zod Mini etc., state before first merge vs latest merge)
+audiophile-ecommerce b83409d49e0a /,/checkout 2decfe6403c4^ 2
+base-apparel-coming-soon-page-fm a3d20c8e4713 / a3d20c8e4713^ 2
+designo-site 520b6e03023d /contact 520b6e03023d^ 2
+dine-restaurant 659808073633 /,/booking 659808073633^ 2
+feedback-app-frontend 20213867e8e5 /,/feedback/new 20213867e8e5^ 2
+intro-component-with-signup-form-fm bdb7e153a44f / 9edc2b01a2cd^ 2
+invoice-app 0558e5f2274e / 0558e5f2274e^ 2
+markdown-editor-ui c4883c90edc2 / 635816d46fe9^ 2
+minimalist-portfolio-website-fm 4519613ba3e1 /contact 2703e84cb74c^ 2
+multi-step-form-fm e6fea5e48f9d / aa26925f4981^ 2
+ping-coming-soon-page-fm d0c4cf1f8655 / d0c4cf1f8655^ 2
+pod-request-access-landing-page-fm c9f36951bda0 / c9f36951bda0^ 2
+single-page-portfolio-fm f7c6406ce2ed / f7c6406ce2ed^ 2

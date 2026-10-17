@@ -10,7 +10,10 @@ const browser = await chromium.launch();
 for (const p of paths.split(',')) for (const w of [375, 768, 1440]) for (const [side, port] of [['base', 3101], ['head', 3102]]) {
   const page = await browser.newPage({ viewport: { width: w, height: 900 }, reducedMotion: 'reduce' });
   await page.goto(`http://127.0.0.1:${port}${p}`, { waitUntil: 'networkidle' });
-  await page.evaluate(() => document.fonts.ready);
+  // Scroll through once so lazy images load, then wait for every image and font before the capture.
+  await page.evaluate(async () => { for (let y = 0; y < document.body.scrollHeight; y += 400) { window.scrollTo(0, y); await new Promise(r => setTimeout(r, 60)); } window.scrollTo(0, 0); });
+  await page.waitForLoadState('networkidle');
+  await page.evaluate(() => Promise.all([document.fonts.ready, ...[...document.images].map(i => i.complete ? null : new Promise(r => { i.onload = i.onerror = r; }))]));
   await page.waitForTimeout(300);
   await page.screenshot({ path: `shot-${side}-${p.replace(/[/?=&]/g, '_')}-${w}.png`, fullPage: true, animations: 'disabled', caret: 'hide' });
   await page.close();

@@ -1,0 +1,8 @@
+# repo default-branch-path-to-font
+space-tourism-website app/fonts/Barlow-Regular.ttf
+space-tourism-website app/fonts/BarlowCondensed-Regular.ttf
+space-tourism-website app/fonts/Bellefair-Regular.ttf
+nft-preview-card app/fonts/Outfit-Variable.ttf
+single-page-portfolio-fm app/fonts/SpaceGrotesk-VariableFont_wght.ttf
+angular-results-summary-component public/assets/fonts/HankenGrotesk-VariableFont_wght.ttf
+link-sharing-app public/fonts/InstrumentSans.ttf
